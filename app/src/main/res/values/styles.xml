@@ -1,0 +1,29 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="textInputStyle">@style/Widget.ShoppingAssistant.TextInputLayout</item>
+    </style>
+
+    <style name="Widget.ShoppingAssistant.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+
+    </style>
+
+    <style name="ThemeOverlay.AppTheme.AppBar" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
+
+    <style name="ThemeOverlay.AppTheme.Popup" parent="ThemeOverlay.MaterialComponents.Dark" />
+
+    <style name="ThemeOverlay.AppTheme.AppBar.Toolbar" parent="ThemeOverlay.AppTheme.AppBar">
+        <!-- Very Important! Dictates the color of option menu items -->
+        <item name="android:textViewStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title
+        </item>
+    </style>
+
+    <style name="ThemeOverlay.AppTheme.Toolbar.Popup" parent="ThemeOverlay.AppTheme.Popup">
+        <item name="android:textViewStyle">@style/TextAppearance.MaterialComponents.Subtitle2</item>
+    </style>
+
+</resources>

@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Payment</string>
+    <string name="amount_required">Amount*</string>
+    <string name="required_field">required field</string>
+    <string name="error_stripe_client_secret_required">Client secret required</string>
+    <string name="payment_success">Payment succeeded</string>
+    <string name="payment_failed">Payment failed</string>
+    <string name="payment_thanks">Thanks for your support</string>
+    <string name="braintree">Braintree</string>
+    <string name="pay_with">Pay With?</string>
+    <string name="stripe">Stripe</string>
+    <string name="square">Square</string>
+    <string name="m_pesa">M-Pesa</string>
+    <string name="pay">Pay</string>
+</resources>

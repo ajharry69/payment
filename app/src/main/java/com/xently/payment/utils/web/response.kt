@@ -1,8 +1,8 @@
 package com.xently.payment.utils.web
 
-import com.xently.payment.utils.web.TaskResult.Error
 import com.xently.payment.utils.IData
 import com.xently.payment.utils.JSON_CONVERTER
+import com.xently.payment.utils.web.TaskResult.Error
 
 interface OnCompleteListener<T> {
     fun onComplete(task: TaskResult<T>?)
@@ -89,6 +89,9 @@ inline val <T> TaskResult<T>.dataOrFail: T
 
 inline val <T> TaskResult<List<T>>.listData: List<T>
     get() = data ?: emptyList()
+
+inline val TaskResult<*>.errorMessage
+    get() = if (this is Error) error.message else null
 
 inline val TaskResult<*>.isError
     get() = this is Error

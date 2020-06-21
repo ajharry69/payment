@@ -8,10 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
-import cn.pedant.SweetAlert.SweetAlertDialog
-import cn.pedant.SweetAlert.SweetAlertDialog.ERROR_TYPE
-import cn.pedant.SweetAlert.SweetAlertDialog.SUCCESS_TYPE
-import com.google.android.material.snackbar.Snackbar
+import cn.pedant.SweetAlert.SweetAlertDialog.*
 import com.google.gson.GsonBuilder
 import com.stripe.android.ApiResultCallback
 import com.stripe.android.PaymentIntentResult
@@ -19,26 +16,24 @@ import com.stripe.android.Stripe
 import com.stripe.android.model.ConfirmPaymentIntentParams
 import com.stripe.android.model.StripeIntent
 import com.xently.payment.R
-import com.xently.payment.data.model.stripe.ClientSecret
+import com.xently.payment.data.model.Money
 import com.xently.payment.databinding.StripeFragmentBinding
+import com.xently.payment.ui.BaseFragment
 import com.xently.payment.utils.Log
 import com.xently.payment.utils.Log.Type.ERROR
 import com.xently.payment.utils.Log.Type.INFO
 import com.xently.payment.utils.isReleaseBuild
 import com.xently.payment.utils.web.TaskResult
-import com.xently.xui.Fragment
 import com.xently.xui.utils.ui.fragment.setupToolbar
-import com.xently.xui.utils.ui.fragment.showSnackBar
 import com.xently.xui.utils.ui.view.setClickListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class StripeFragment : Fragment(), ApiResultCallback<PaymentIntentResult> {
+class StripeFragment : BaseFragment(), ApiResultCallback<PaymentIntentResult> {
 
     private val args: StripeFragmentArgs by navArgs()
     private val viewModel: StripeViewModel by viewModels()
     private lateinit var stripe: Stripe
-    private var clientSecret: ClientSecret? = null
 
     private var _binding: StripeFragmentBinding? = null
     private val binding: StripeFragmentBinding
@@ -66,17 +61,20 @@ class StripeFragment : Fragment(), ApiResultCallback<PaymentIntentResult> {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.setAmount(args.amount)
-        viewModel.getClientSecret().observe(viewLifecycleOwner, Observer {
+        viewModel.clientSecret.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is TaskResult.Success -> {
-                    clientSecret = it.data
+                    binding.cardInput.paymentMethodCreateParams?.let { params ->
+                        val confirmParams = ConfirmPaymentIntentParams
+                            .createWithPaymentMethodCreateParams(params, it.data.clientSecret)
+                        // Send the payment details to Stripe
+                        stripe.confirmPayment(this@StripeFragment, confirmParams)
+                    }
                 }
-                is TaskResult.Error -> {
-                    it.error.localizedMessage ?: it.error.message?.let { it1 -> showSnackBar(it1) }
-                }
+                is TaskResult.Error -> onError(it.error)
                 TaskResult.Loading -> {
-                    Log.show(LOG_TAG, it.toString())
+                    val title = getString(R.string.processing_payment)
+                    showAlertDialog(null, title, PROGRESS_TYPE, false)
                 }
             }
         })
@@ -98,11 +96,12 @@ class StripeFragment : Fragment(), ApiResultCallback<PaymentIntentResult> {
         val status = paymentIntent.status
         if (status == StripeIntent.Status.Succeeded) {
             with(GsonBuilder().setPrettyPrinting().create()) {
-                showAlertDialog(
-                    getString(R.string.payment_thanks),
-                    getString(R.string.payment_success),
-                    SUCCESS_TYPE
-                )
+                alertDialog?.run {
+                    titleText = getString(R.string.payment_success)
+                    contentText = getString(R.string.payment_thanks)
+                    setCanceledOnTouchOutside(true)
+                    changeAlertType(SUCCESS_TYPE)
+                }
                 Log.show(LOG_TAG, toJson(paymentIntent), type = INFO)
             }
         } else if (status == StripeIntent.Status.RequiresPaymentMethod) {
@@ -111,30 +110,19 @@ class StripeFragment : Fragment(), ApiResultCallback<PaymentIntentResult> {
     }
 
     override fun onError(e: Exception) {
-        showAlertDialog(e.message.toString(), getString(R.string.payment_failed))
+        alertDialog?.run {
+            titleText = getString(R.string.payment_failed)
+            contentText = e.message.toString()
+            setCanceledOnTouchOutside(true)
+            changeAlertType(ERROR_TYPE)
+        }
         Log.show(LOG_TAG, e.message, e, type = ERROR)
-    }
-
-    private fun showAlertDialog(content: String, title: String? = null, type: Int = ERROR_TYPE) {
-        val dialog = SweetAlertDialog(requireContext(), type)
-            .setTitleText(title)
-            .setContentText(content)
-        dialog.show()
     }
 
     private fun activateClickListeners() {
         with(binding) {
             pay.setClickListener {
-                if (clientSecret == null) {
-                    showSnackBar(R.string.error_stripe_client_secret_required, Snackbar.LENGTH_LONG)
-                    return@setClickListener
-                }
-                cardInput.paymentMethodCreateParams?.let { params ->
-                    val confirmParams = ConfirmPaymentIntentParams
-                        .createWithPaymentMethodCreateParams(params, clientSecret!!.clientSecret)
-                    // Send the payment details to Stripe
-                    stripe.confirmPayment(this@StripeFragment, confirmParams)
-                }
+                viewModel.fetchClientSecret(Money(args.amount, args.currency))
             }
         }
     }

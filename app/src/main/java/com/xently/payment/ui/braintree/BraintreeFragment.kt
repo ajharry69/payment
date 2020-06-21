@@ -6,12 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.xently.payment.databinding.BraintreeFragmentBinding
+import com.xently.payment.ui.BaseFragment
 import com.xently.xui.Fragment
 import com.xently.xui.utils.ui.fragment.setupToolbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class BraintreeFragment : Fragment() {
+class BraintreeFragment : BaseFragment() {
 
     private val viewModel: BraintreeViewModel by viewModels()
     private var _binding: BraintreeFragmentBinding? = null

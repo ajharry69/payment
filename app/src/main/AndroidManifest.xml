@@ -3,6 +3,8 @@
     package="com.xently.payment">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- required by Square In-App sdk -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".Payment"

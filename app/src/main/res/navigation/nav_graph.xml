@@ -27,35 +27,52 @@
         android:id="@+id/dest_stripe_pay"
         android:name="com.xently.payment.ui.stripe.StripeFragment"
         android:label="@string/stripe"
-        tools:layout="@layout/stripe_fragment" >
+        tools:layout="@layout/stripe_fragment">
         <argument
             android:name="amount"
             app:argType="float" />
+        <argument
+            android:name="currency"
+            android:defaultValue="USD"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/dest_braintree_pay"
         android:name="com.xently.payment.ui.braintree.BraintreeFragment"
         android:label="@string/braintree"
-        tools:layout="@layout/braintree_fragment" >
+        tools:layout="@layout/braintree_fragment">
         <argument
             android:name="amount"
             app:argType="float" />
+        <argument
+            android:name="currency"
+            android:defaultValue="USD"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/dest_square_pay"
         android:name="com.xently.payment.ui.square.SquareFragment"
         android:label="@string/square"
-        tools:layout="@layout/square_fragment" >
-        <argument android:name="amount"
+        tools:layout="@layout/square_fragment">
+        <argument
+            android:name="amount"
             app:argType="float" />
+        <argument
+            android:name="currency"
+            android:defaultValue="USD"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/dest_mpesa_pay"
         android:name="com.xently.payment.ui.mpesa.MpesaFragment"
         android:label="@string/m_pesa"
-        tools:layout="@layout/mpesa_fragment" >
+        tools:layout="@layout/mpesa_fragment">
         <argument
             android:name="amount"
             app:argType="float" />
+        <argument
+            android:name="currency"
+            android:defaultValue="USD"
+            app:argType="string" />
     </fragment>
 </navigation>

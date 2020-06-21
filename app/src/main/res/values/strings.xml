@@ -12,4 +12,9 @@
     <string name="square">Square</string>
     <string name="m_pesa">M-Pesa</string>
     <string name="pay">Pay</string>
+    <string name="payment_cancelled">Payment cancelled</string>
+    <string name="network_failure">Network failure</string>
+    <string name="currency">Currency</string>
+    <string name="default_currency">USD</string>
+    <string name="processing_payment">Processing payment…</string>
 </resources>

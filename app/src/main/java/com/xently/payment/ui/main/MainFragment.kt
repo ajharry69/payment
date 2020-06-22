@@ -16,7 +16,6 @@ import com.xently.payment.ui.main.MainFragmentDirections.Companion.stripePay
 import com.xently.xui.Fragment
 import com.xently.xui.utils.ui.fragment.setupToolbar
 import com.xently.xui.utils.ui.view.addTextChangeListener
-import com.xently.xui.utils.ui.view.setClickListener
 import com.xently.xui.utils.ui.view.setErrorText
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
@@ -72,22 +71,22 @@ class MainFragment : Fragment() {
 
     private fun activateClickListeners() {
         with(binding) {
-            stripe.setClickListener { view ->
+            stripe.setOnClickListener { view ->
                 amount.text.toString().toFloatOrNull()?.let {
                     view.findNavController().navigate(stripePay(it, getSelectedCurrency()))
                 } ?: amountContainer.setErrorText(R.string.required_field)
             }
-            square.setClickListener { view ->
+            square.setOnClickListener { view ->
                 amount.text.toString().toFloatOrNull()?.let {
                     view.findNavController().navigate(squarePay(it, getSelectedCurrency()))
                 } ?: amountContainer.setErrorText(R.string.required_field)
             }
-            braintree.setClickListener { view ->
+            braintree.setOnClickListener { view ->
                 amount.text.toString().toFloatOrNull()?.let {
                     view.findNavController().navigate(braintreePay(it, getSelectedCurrency()))
                 } ?: amountContainer.setErrorText(R.string.required_field)
             }
-            mpesa.setClickListener { view ->
+            mpesa.setOnClickListener { view ->
                 amount.text.toString().toFloatOrNull()?.let {
                     view.findNavController().navigate(mpesaPay(it, getSelectedCurrency()))
                 } ?: amountContainer.setErrorText(R.string.required_field)

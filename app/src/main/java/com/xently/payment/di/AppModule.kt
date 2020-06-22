@@ -1,18 +1,25 @@
 package com.xently.payment.di
 
 import com.xently.payment.SquareCardEntryBackgroundHandler
+import com.xently.payment.data.repository.braintree.BraintreeRepository
+import com.xently.payment.data.repository.braintree.IBraintreeRepository
 import com.xently.payment.data.repository.square.ISquareRepository
 import com.xently.payment.data.repository.square.SquareRepository
 import com.xently.payment.data.repository.stripe.IStripeRepository
 import com.xently.payment.data.repository.stripe.StripeRepository
+import com.xently.payment.data.source.IBraintreeDataSource
 import com.xently.payment.data.source.ISquareDataSource
 import com.xently.payment.data.source.IStripeDataSource
+import com.xently.payment.data.source.local.BraintreeLocalDataSource
 import com.xently.payment.data.source.local.SquareLocalDataSource
 import com.xently.payment.data.source.local.StripeLocalDataSource
+import com.xently.payment.data.source.remote.BraintreeRemoteDataSource
 import com.xently.payment.data.source.remote.SquareRemoteDataSource
 import com.xently.payment.data.source.remote.StripeRemoteDataSource
+import com.xently.payment.di.AppModule.LocalBraintreeDataSource
 import com.xently.payment.di.AppModule.LocalSquareDataSource
 import com.xently.payment.di.AppModule.LocalStripeDataSource
+import com.xently.payment.di.AppModule.RemoteBraintreeDataSource
 import com.xently.payment.di.AppModule.RemoteSquareDataSource
 import com.xently.payment.di.AppModule.RemoteStripeDataSource
 import dagger.Binds
@@ -45,6 +52,14 @@ object AppModule {
     @Retention(AnnotationRetention.RUNTIME)
     annotation class LocalSquareDataSource
 
+    @Qualifier
+    @Retention(AnnotationRetention.RUNTIME)
+    annotation class RemoteBraintreeDataSource
+
+    @Qualifier
+    @Retention(AnnotationRetention.RUNTIME)
+    annotation class LocalBraintreeDataSource
+
     @Provides
     @RemoteStripeDataSource
     @Singleton
@@ -64,6 +79,16 @@ object AppModule {
     @LocalSquareDataSource
     @Singleton
     fun provideLocalSquareDataSource(): ISquareDataSource = SquareLocalDataSource()
+
+    @Provides
+    @RemoteBraintreeDataSource
+    @Singleton
+    fun provideRemoteBraintreeDataSource(): IBraintreeDataSource = BraintreeRemoteDataSource()
+
+    @Provides
+    @LocalBraintreeDataSource
+    @Singleton
+    fun provideLocalBraintreeDataSource(): IBraintreeDataSource = BraintreeLocalDataSource()
 
     @Provides
     fun provideIODispatcher(): CoroutineDispatcher = Dispatchers.IO
@@ -87,6 +112,14 @@ object RepositoryModule {
         @RemoteSquareDataSource remote: ISquareDataSource,
         ioDispatcher: CoroutineDispatcher
     ): ISquareRepository = SquareRepository(local, remote, ioDispatcher)
+
+    @Provides
+    @Singleton
+    fun provideBraintreeRepository(
+        @LocalBraintreeDataSource local: IBraintreeDataSource,
+        @RemoteBraintreeDataSource remote: IBraintreeDataSource,
+        ioDispatcher: CoroutineDispatcher
+    ): IBraintreeRepository = BraintreeRepository(local, remote, ioDispatcher)
 }
 
 @Module

@@ -1,14 +1,14 @@
 package com.xently.payment
 
 import android.annotation.SuppressLint
-import com.xently.payment.utils.web.Headers
-import com.xently.payment.utils.web.ServerResponse
-import com.xently.payment.utils.web.TaskResult
 import com.xently.payment.utils.Constants.connectTO
 import com.xently.payment.utils.Constants.readTO
 import com.xently.payment.utils.Constants.writeTO
 import com.xently.payment.utils.JSON_CONVERTER
 import com.xently.payment.utils.Log
+import com.xently.payment.utils.web.Headers
+import com.xently.payment.utils.web.ServerResponse
+import com.xently.payment.utils.web.TaskResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.Interceptor
@@ -87,7 +87,8 @@ object WebServiceBuilder {
             )
             response.body()?.let { withResponse?.invoke(it) }
             if (response.isSuccessful) {
-                TaskResult.Success(if (statusCode == 204) Any() as P else body!!.payload!!)
+                val data = if (statusCode == 204) Any() as P else body?.payload ?: Any() as P
+                TaskResult.Success(data)
             } else {
                 withContext<TaskResult<P>>(Dispatchers.IO) {
                     TaskResult.Error(Exception(errorBody?.string()))

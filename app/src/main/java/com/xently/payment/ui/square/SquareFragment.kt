@@ -60,7 +60,6 @@ class SquareFragment : BaseFragment(), Callback<CardEntryActivityResult> {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
         // TODO: Investigate why it's not being called by the sdk
         Log.show(LOG_TAG, "Processing payment results...", type = Log.Type.INFO)
 

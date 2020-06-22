@@ -88,7 +88,6 @@ dependencies {
     // Payment
     implementation 'com.stripe:stripe-android:14.5.0'
     implementation 'com.braintreepayments.api:drop-in:4.5.0'
-    implementation 'com.braintreepayments.api:data-collector:3.11.1'
     implementation "com.squareup.sdk.in-app-payments:card-entry:1.4.0"
 
     implementation 'org.greenrobot:eventbus:3.2.0'

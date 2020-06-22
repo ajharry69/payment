@@ -31,7 +31,6 @@ import com.xently.xui.utils.ui.view.disableViews
 import com.xently.xui.utils.ui.view.enableViews
 import dagger.hilt.android.AndroidEntryPoint
 
-
 @AndroidEntryPoint
 class BraintreeFragment : BaseFragment() {
 
@@ -65,9 +64,6 @@ class BraintreeFragment : BaseFragment() {
                 is TaskResult.Success -> {
                     enableViews(binding.pay)
                     clientToken = it.data
-                    val message = "Done loading braintree client token"
-                    showSnackBar(message)
-                    Log.show(LOG_TAG, "${message}: ${clientToken!!.token}", type = INFO)
                 }
                 is Error -> {
                     enableViews(binding.pay)
@@ -77,7 +73,7 @@ class BraintreeFragment : BaseFragment() {
                 }
                 TaskResult -> {
                     disableViews(binding.pay)
-                    val message = "Loading braintree client token..."
+                    val message = "Fetching client token..."
                     showSnackBar(message)
                     Log.show(LOG_TAG, message, type = INFO)
                 }

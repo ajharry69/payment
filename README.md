@@ -1,4 +1,6 @@
 # Payment
+[![Build Status](https://travis-ci.com/ajharry69/payment.svg?branch=master)](https://travis-ci.com/ajharry69/payment)
+
 An android app showing how to integrate [stripe][stripe-url], [square][square-url], [braintree][braintree-url] and [M-Pesa][mpesa-url] payment gateways.
 
 The project relies on [django-xpay][django-xpay-url](a [django][django-url] project) for backend code. To successfully run the app, you will need to:

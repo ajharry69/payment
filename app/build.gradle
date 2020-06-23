@@ -53,7 +53,7 @@ dependencies {
     implementation "com.google.android.material:material:$material_version"
 
     // Hilt-DI
-    implementation "com.google.dagger:hilt-android:2.28-alpha"
+    implementation 'com.google.dagger:hilt-android:2.28.1-alpha'
     kapt "com.google.dagger:hilt-android-compiler:2.28-alpha"
     implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha01'
     kapt 'androidx.hilt:hilt-compiler:1.0.0-alpha01'
@@ -87,7 +87,7 @@ dependencies {
 
     // Payment
     implementation 'com.stripe:stripe-android:14.5.0'
-    implementation 'com.braintreepayments.api:drop-in:4.5.0'
+    implementation 'com.braintreepayments.api:drop-in:4.6.0'
     implementation "com.squareup.sdk.in-app-payments:card-entry:1.4.0"
 
     implementation 'org.greenrobot:eventbus:3.2.0'

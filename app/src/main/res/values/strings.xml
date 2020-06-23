@@ -17,4 +17,5 @@
     <string name="currency">Currency</string>
     <string name="default_currency">USD</string>
     <string name="processing_payment">Processing payment…</string>
+    <string name="mobile_number_required">Mobile number*</string>
 </resources>

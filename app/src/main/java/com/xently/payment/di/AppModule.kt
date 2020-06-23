@@ -3,17 +3,22 @@ package com.xently.payment.di
 import com.xently.payment.SquareCardEntryBackgroundHandler
 import com.xently.payment.data.repository.braintree.BraintreeRepository
 import com.xently.payment.data.repository.braintree.IBraintreeRepository
+import com.xently.payment.data.repository.mpesa.IMpesaRepository
+import com.xently.payment.data.repository.mpesa.MpesaRepository
 import com.xently.payment.data.repository.square.ISquareRepository
 import com.xently.payment.data.repository.square.SquareRepository
 import com.xently.payment.data.repository.stripe.IStripeRepository
 import com.xently.payment.data.repository.stripe.StripeRepository
 import com.xently.payment.data.source.IBraintreeDataSource
+import com.xently.payment.data.source.IMpesaDataSource
 import com.xently.payment.data.source.ISquareDataSource
 import com.xently.payment.data.source.IStripeDataSource
 import com.xently.payment.data.source.local.BraintreeLocalDataSource
+import com.xently.payment.data.source.local.MpesaLocalDataSource
 import com.xently.payment.data.source.local.SquareLocalDataSource
 import com.xently.payment.data.source.local.StripeLocalDataSource
 import com.xently.payment.data.source.remote.BraintreeRemoteDataSource
+import com.xently.payment.data.source.remote.MpesaRemoteDataSource
 import com.xently.payment.data.source.remote.SquareRemoteDataSource
 import com.xently.payment.data.source.remote.StripeRemoteDataSource
 import com.xently.payment.di.AppModule.LocalBraintreeDataSource
@@ -60,6 +65,14 @@ object AppModule {
     @Retention(AnnotationRetention.RUNTIME)
     annotation class LocalBraintreeDataSource
 
+    @Qualifier
+    @Retention(AnnotationRetention.RUNTIME)
+    annotation class RemoteMpesaDataSource
+
+    @Qualifier
+    @Retention(AnnotationRetention.RUNTIME)
+    annotation class LocalMpesaDataSource
+
     @Provides
     @RemoteStripeDataSource
     @Singleton
@@ -91,6 +104,16 @@ object AppModule {
     fun provideLocalBraintreeDataSource(): IBraintreeDataSource = BraintreeLocalDataSource()
 
     @Provides
+    @RemoteMpesaDataSource
+    @Singleton
+    fun provideRemoteMpesaDataSource(): IMpesaDataSource = MpesaRemoteDataSource()
+
+    @Provides
+    @LocalMpesaDataSource
+    @Singleton
+    fun provideLocalMpesaDataSource(): IMpesaDataSource = MpesaLocalDataSource()
+
+    @Provides
     fun provideIODispatcher(): CoroutineDispatcher = Dispatchers.IO
 }
 
@@ -120,6 +143,14 @@ object RepositoryModule {
         @RemoteBraintreeDataSource remote: IBraintreeDataSource,
         ioDispatcher: CoroutineDispatcher
     ): IBraintreeRepository = BraintreeRepository(local, remote, ioDispatcher)
+
+    @Provides
+    @Singleton
+    fun providMpesaRepository(
+        @AppModule.LocalMpesaDataSource local: IMpesaDataSource,
+        @AppModule.RemoteMpesaDataSource remote: IMpesaDataSource,
+        ioDispatcher: CoroutineDispatcher
+    ): IMpesaRepository = MpesaRepository(local, remote, ioDispatcher)
 }
 
 @Module

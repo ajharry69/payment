@@ -146,7 +146,7 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun providMpesaRepository(
+    fun provideMpesaRepository(
         @AppModule.LocalMpesaDataSource local: IMpesaDataSource,
         @AppModule.RemoteMpesaDataSource remote: IMpesaDataSource,
         ioDispatcher: CoroutineDispatcher
